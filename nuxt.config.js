@@ -1,5 +1,5 @@
 export default {
-  server : {
+  server: {
     host: '0.0.0.0',
     port: 3000
   },
@@ -12,7 +12,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: '禅心',
+    title: '禅心日历',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -53,10 +53,17 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
+    icon: {
+      /* icon options */
+      source: "static/icon.png",
+    },
     manifest: {
-
+      name: '禅心日历',
       lang: 'zh',
     },
+    meta: {
+      /* meta options */
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

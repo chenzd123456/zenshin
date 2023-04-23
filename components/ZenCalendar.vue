@@ -12,11 +12,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(week, index) in getCalendar" :key="index">
-          <td v-for="(day, dayIndex) in week" :key="day"
-            :class="{ today: isToday(day), weekend: isWeekend(dayIndex), notCurrentMonth: !isCurrentMonth(day) }"
-            class="cell">
-            {{ day.date() }}
+        <tr v-for="(week, index) in  getCalendar " :key="index">
+          <td v-for="(day, dayIndex) in  week " :key="dayIndex" class="cell">
+            <!-- <div v-if="isWorkday(day)" class="workday">班</div>
+            <div v-else-if="isHoliday(day)" class="holiday">休</div> -->
+            <span
+              :class="{ today: isToday(day), weekend: isWeekend(dayIndex), notCurrentMonth: !isCurrentMonth(day), workday: isWorkday(day), holiday: isHoliday(day) }"
+              class="day">{{ day.date() }}</span>
           </td>
         </tr>
       </tbody>
@@ -27,7 +29,8 @@
 <script>
 import { computed, defineComponent, ref } from "vue";
 import dayjs from "dayjs";
-
+import holidaysCn from "@/static/holiday-cn.json";
+dayjs.locale('zh-cn');
 export default defineComponent({
   name: "ZenCalendar",
   setup() {
@@ -72,6 +75,37 @@ export default defineComponent({
       return day.month() === today.value.month();
     }
 
+    function isHoliday(day) {
+      const date = day.format("YYYY-MM-DD");
+
+      const holidaysCnYears = holidaysCn.filter(data => data.year >= parseInt(currentYear.value)).sort((a, b) => { return a.years - b.years })
+      let ret = false;
+
+      holidaysCnYears.forEach(element => {
+        const days = element.days.filter(day => day.date === date)
+        if (days.length !== 0) {
+          ret = days[0].isOffDay;
+        }
+      });
+
+      return ret;
+    }
+
+    function isWorkday(day) {
+      const date = day.format("YYYY-MM-DD");
+      const holidaysCnYears = holidaysCn.filter(data => data.year >= parseInt(currentYear.value)).sort((a, b) => { return a.years - b.years })
+      let ret = false;
+
+      holidaysCnYears.forEach(element => {
+        const days = element.days.filter(day => day.date === date)
+        if (days.length !== 0) {
+          ret = !days[0].isOffDay;
+        }
+      });
+
+      return ret;
+    }
+
     return {
       days,
       currentMonth,
@@ -83,6 +117,8 @@ export default defineComponent({
       isToday,
       isWeekend,
       isCurrentMonth,
+      isHoliday,
+      isWorkday
     };
   },
 });
@@ -96,12 +132,12 @@ export default defineComponent({
 
 .cell {
   text-align: center;
-  margin: 1rem;
+  padding: 1rem;
 }
 
 .today {
-  color: red;
-  font-weight: bold;
+  border-radius: 50%;
+  border: 2px solid red;
 }
 
 .weekend {
@@ -123,6 +159,29 @@ export default defineComponent({
 }
 
 .font {
-  font-size: 16px;
+  font-size: 24px;
+}
+
+.day {
+  position: relative;
+  padding: 0.2rem;
+}
+
+.holiday::before {
+  content: "休";
+  font-size: 8px;
+  position: absolute;
+  top: -16px;
+  left: -16px;
+  z-index: 1;
+}
+
+.workday::before {
+  content: "班";
+  font-size: 8px;
+  position: absolute;
+  top: -16px;
+  left: -16px;
+  z-index: 1;
 }
 </style>
