@@ -1,9 +1,11 @@
 <template>
-  <ZenCalendar />
+  <ZenLayout>
+    <ZenCalendar/>
+  </ZenLayout>
 </template>
 
 <script>
 export default {
-  name: 'IndexPage',
+  name: "IndexPage"
 }
 </script>
