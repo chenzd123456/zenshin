@@ -13,11 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          submodules: 'recursive'
+          submodules: true
       - name: Update submodules
         run: |
-          git submodule update --init --recursive
-          git config --global user.email "<your-email>"
-          git config --global user.name "<your-name>"
-          git commit -am "Update submodules"
-          git push
+          git config --global user.email "action@noreply.github.com"
+          git config --global user.name "action"
+          git submodule update --init --recursive || echo "submodule is updated"
+          git commit -am "Update submodules" && git push || echo "No changes to commit"
