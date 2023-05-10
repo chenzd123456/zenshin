@@ -1,5 +1,7 @@
 <template>
-  <ZenCalendar />
+  <div class="container">
+    <ZenCalendar />
+  </div>
 </template>
 
 <script>

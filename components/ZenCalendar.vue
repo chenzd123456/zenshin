@@ -14,8 +14,6 @@
       <tbody>
         <tr v-for="(week, index) in  getCalendar " :key="index">
           <td v-for="(day, dayIndex) in  week " :key="dayIndex" class="cell">
-            <!-- <div v-if="isWorkday(day)" class="workday">班</div>
-            <div v-else-if="isHoliday(day)" class="holiday">休</div> -->
             <span
               :class="{ today: isToday(day), weekend: isWeekend(dayIndex), notCurrentMonth: !isCurrentMonth(day), workday: isWorkday(day), holiday: isHoliday(day) }"
               class="day">{{ day.date() }}</span>
@@ -132,7 +130,7 @@ export default defineComponent({
 
 .cell {
   text-align: center;
-  padding: 1rem;
+  height: 3rem;
 }
 
 .today {
@@ -159,29 +157,40 @@ export default defineComponent({
 }
 
 .font {
-  font-size: 24px;
+  font-size: 1rem;
 }
 
 .day {
   position: relative;
-  padding: 0.2rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .holiday::before {
   content: "休";
-  font-size: 8px;
+  font-size: 0.4rem;
   position: absolute;
   top: -16px;
   left: -16px;
   z-index: 1;
+  color: white;
+  background-color: green;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
 }
 
 .workday::before {
   content: "班";
-  font-size: 8px;
+  font-size: 0.4rem;
   position: absolute;
   top: -16px;
   left: -16px;
   z-index: 1;
+  color: white;
+  background-color: red;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
 }
 </style>
